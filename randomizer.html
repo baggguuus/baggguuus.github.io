@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengacak Kelompok</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #4A90E2;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="number"], input[type="password"] {
+            padding: 5px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 7px 15px;
+            background-color: #4A90E2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #357ABD;
+        }
+        .group {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Pembagi Kelompok</h1>
+    <label for="password">Masukkan Password:</label>
+    <input type="password" id="password" placeholder="Masukkan password">
+    <button id="enterPassword">Masuk</button>
+
+    <div id="randomizerSection" style="display: none;">
+        <label for="numGroups">Jumlah Kelompok:</label>
+        <input type="number" id="numGroups" min="1" required>
+        <button id="createGroups">Buat Kelompok</button>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const names = [
+            "ADILLA NAZHRIL AHMAD(L)",
+            "AHMAD NUR FALAHUL MUTTAQIN(L)",
+            "AHMAD SYEH BUDIN(L)",
+            "AKMAL AZHARIA ZALFA(L)",
+            "ALMIRA MEYTA ANISA KIRANA(P)",
+            "AMIR FAISAL ANNAFI(L)",
+            "ANDHIKA RIZKY MAULANA PUTRA(L)",
+            "ANDHINI MAYANG SARI(P)",
+            "ANINDYA ARIN RAHMAHDANI(P)",
+            "ARIN AYUNING TYAS(P)",
+            "BAGUS ARYA LAKSANA(L)",
+            "BINTANG ANGARA KUSUMA(L)",
+            "CANDRAKA DEWI PUSPITA(P)",
+            "CELIN CHIQUITTA CANDY CAROLINE(P)",
+            "DIANITA AIRA DIYASTUTI(P)",
+            "ELIZA NUR AZIZAH(P)",
+            "FARAHDIYAH NUR NATASYA(P)",
+            "HANDIKA GALANG WICAKSONO(L)",
+            "HAYDAR JAFRAN MULTAZAM(L)",
+            "INDRI DWI JULYANTI(P)",
+            "INEZ AYU AGUSTIN(P)",
+            "LUCKY FRANZACKY(L)",
+            "MEVITA BUNGA CANTIKA(P)",
+            "MERLINDA ZAHROTU NUR SITA(P)",
+            "MUHAMMAD RICO RAMADHANI(L)",
+            "MUHAMMAD YUSRIL ANWAR(L)",
+            "NABELLA DIAN SAPUTRI(P)",
+            "NADIV PRIAYUNINDHA(P)",
+            "NIKEN AYU LARASATI(P)",
+            "NOVAL TAUFIQ ARJUNANTA(L)",
+            "RAKA ILHAM NARENDRA TAMA(L)",
+            "RAYES PURWANTO(L)",
+            "RENITA OKTAVIA YUMAIRAH(P)",
+            "RERE SULISTYO(P)",
+            "SELFI NIKMATUL KHOIROH(P)",
+            "SHERIL ANAYA KIRANIA(P)",
+            "SHERLY MIFTKHUL JANNAH(P)",
+            "SHILA MAULANI(P)",
+            "STEVANNY NAJA NOVELICA FELOVE(P)",
+            "YUDHA JULIANTO(L)"
+        ];
+
+        document.getElementById("enterPassword").onclick = function() {
+            const passwordInput = document.getElementById("password").value;
+            if (passwordInput === "TJKT3") {
+                document.getElementById("randomizerSection").style.display = "block";
+            } else {
+                alert("Password salah. Coba lagi.");
+            }
+        };
+
+        document.getElementById("createGroups").onclick = function() {
+            const numGroups = parseInt(document.getElementById("numGroups").value);
+            if (numGroups < 1) {
+                alert("Jumlah kelompok harus lebih dari 0.");
+                return;
+            }
+            const groups = createGroups(names, numGroups);
+            displayGroups(groups);
+            saveResults(groups); // Save results to localStorage
+        };
+
+        function createGroups(names, numGroups) {
+            const shuffledNames = names.sort(() => 0.5 - Math.random());
+            const groups = Array.from({ length: numGroups }, () => []);
+            shuffledNames.forEach((name, index) => {
+                groups[index % numGroups].push(name);
+            });
+            return groups;
+        }
+
+        function displayGroups(groups) {
+            const resultsDiv = document.getElementById("results");
+            resultsDiv.innerHTML = ""; // Clear previous results
+            groups.forEach((group, index) => {
+                const groupDiv = document.createElement("div");
+                groupDiv.classList.add("group");
+                groupDiv.innerHTML = `<strong>Kelompok ${index + 1}:</strong> ${group.join(', ')}`;
+                resultsDiv.appendChild(groupDiv);
+            });
+        }
+
+        function saveResults(groups) {
+            const results = groups.map((group, index) => `Kelompok ${index + 1}: ${group.join(', ')}`).join('\n');
+            localStorage.setItem('groupResults', results); // Save to localStorage
+        }
+    </script>
+</body>
+</html>
