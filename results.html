@@ -5,42 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lihat Hasil</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-            color: #4A90E2;
-        }
-        .group {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .no-results {
-            text-align: center;
-            color: #888;
-        }
-        button {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            background-color: #4A90E2;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #357ABD;
-        }
+        /* CSS sama seperti sebelumnya */
     </style>
 </head>
 <body>
@@ -50,19 +15,25 @@
 
     <script>
         window.onload = function() {
-            const resultsDiv = document.getElementById("results");
-            const results = localStorage.getItem('groupResults');
-            if (results) {
-                const groups = results.split('\n');
-                groups.forEach(group => {
-                    const groupDiv = document.createElement("div");
-                    groupDiv.classList.add("group");
-                    groupDiv.textContent = group;
-                    resultsDiv.appendChild(groupDiv);
+            fetch('/path/to/results.json')
+                .then(response => response.json())
+                .then(data => {
+                    const resultsDiv = document.getElementById("results");
+                    if (data.results.length > 0) {
+                        data.results.forEach(group => {
+                            const groupDiv = document.createElement("div");
+                            groupDiv.classList.add("group");
+                            groupDiv.textContent = group;
+                            resultsDiv.appendChild(groupDiv);
+                        });
+                    } else {
+                        resultsDiv.innerHTML = '<p class="no-results">Belum ada hasil pengacakan kelompok.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    document.getElementById("results").innerHTML = '<p class="no-results">Gagal memuat hasil.</p>';
                 });
-            } else {
-                resultsDiv.innerHTML = '<p class="no-results">Belum ada hasil pengacakan kelompok.</p>';
-            }
         };
     </script>
 </body>
